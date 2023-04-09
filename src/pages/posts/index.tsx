@@ -6,7 +6,7 @@ type Props = {
   posts: any[];
 };
 
-const postsList = ({ posts }: Props) => {
+const PostsList = ({ posts }: Props) => {
   if (!posts) return;
   return (
     <>
@@ -14,7 +14,7 @@ const postsList = ({ posts }: Props) => {
         {posts.map((post: any) => {
           return (
             <li key={post.id}>
-              <Link href={`/posts/${post.id}`}>{post.title}</Link>
+              <Link href={`/posts/${post.ma_phim}`}>{post.ten_phim}</Link>
             </li>
           );
         })}
@@ -23,17 +23,18 @@ const postsList = ({ posts }: Props) => {
   );
 };
 
-export default postsList;
+export default PostsList;
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const response = await fetch(
-    "https://js-post-api.herokuapp.com/api/posts?_page=1"
+    "https://nodejs.dothinh.info/api/movies/getMovieByDate?from=2023-3-1&to=2023-4-1"
   );
-  const posts = await response.json();
+  let posts = await response.json();
 
   return {
     props: {
       posts: posts.data,
     },
+    revalidate: 5,
   };
 };
