@@ -20,17 +20,16 @@ export default async function handler(
     const cookies = new Cookies(req, res);
     const access_token = cookies.get("access_token");
     if (access_token) {
-      req.headers.Authorization = `Bearer ${access_token}`;
+      //kiểm tra cookies
+      req.headers.Authorization = `Bearer ${access_token}`; //gắn token vào headers
     }
-    req.headers.cookies = "";
+    req.headers.cookies = ""; //xóa cookies
     proxy.web(req, res, {
       target: process.env.API_URL,
       changeOrigin: true,
       selfHandleResponse: false,
     });
 
-    proxy.once("proxyRes", () => {
-      resolve(true);
-    });
+    proxy.once("proxyRes", () => resolve(true));
   });
 }
