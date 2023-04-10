@@ -39,6 +39,7 @@ const PostDetail = ({ ten_phim, ma_phim }: Props) => {
   const { data, error, isLoading } = MovieDetailFetcher(ma_phim);
 
   if (isLoading) return <div>LOADING</div>;
+
   return (
     <div>
       <h1>Title: {ten_phim && ten_phim}</h1>
