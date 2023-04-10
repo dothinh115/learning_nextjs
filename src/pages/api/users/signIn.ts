@@ -20,9 +20,9 @@ export default async function handler(
   new Promise((resolve) => {
     req.headers.cookies = "";
     proxy.web(req, res, {
-      target: process.env.API_URL,
-      changeOrigin: true,
-      selfHandleResponse: true,
+      target: process.env.API_URL, //Chuyển hướng sang api
+      changeOrigin: true, // thay đổi url gốc
+      selfHandleResponse: true, //tự xử lý bằng tay
     });
 
     const proxyResCb: ProxyResCallback = (proxyRes, req, res) => {
@@ -36,11 +36,13 @@ export default async function handler(
           //yarn add cookies
           //yarn add --dev @types/cookies
           const cookies = new Cookies(req, res, {
-            secure: process.env.NODE_ENV !== "development",
+            secure: process.env.NODE_ENV !== "development", //bật secure khi ở môi trường production
           });
+
           cookies.set("access_token", access_token, {
-            httpOnly: true,
-            sameSite: "lax",
+            //set access_token
+            httpOnly: true, //bật httpOnly
+            sameSite: "lax", //chia sẻ cookies giữa những origin url, google cookies samesite để biết thêm
           });
 
           (res as NextApiResponse)
@@ -56,6 +58,6 @@ export default async function handler(
       });
     };
 
-    proxy.once("proxyRes", proxyResCb);
+    proxy.once("proxyRes", proxyResCb); //handle khi nhận dc response
   });
 }
