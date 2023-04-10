@@ -17,8 +17,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  req.headers.cookies = "";
   new Promise((resolve) => {
-    req.headers.cookies = "";
     proxy.web(req, res, {
       target: process.env.API_URL, //Chuyển hướng sang api
       changeOrigin: true, // thay đổi url gốc
@@ -49,10 +49,11 @@ export default async function handler(
             .status(200)
             .json({ message: "Signin successfully!" });
         } catch (error) {
-          (res as NextApiResponse)
-            .status(500)
-            .json({ message: "Somgthing went wrong!" });
-          console.log(error);
+          // (res as NextApiResponse)
+          //   .status(500)
+          //   .json({ message: "Somgthing went wrong!" });
+          const result = JSON.parse(body);
+          (res as NextApiResponse).status(result.statusCode).json(result);
         }
         resolve(true);
       });

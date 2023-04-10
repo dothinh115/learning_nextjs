@@ -2,12 +2,6 @@ import { HomeLayoutType } from "@/utils/types/layoutTypes";
 import React, { ReactElement, useEffect } from "react";
 
 const HomeLayout = ({ children }: HomeLayoutType): ReactElement => {
-  useEffect(() => {
-    console.log("component did mount");
-    return () => {
-      console.log("component will unmount");
-    };
-  }, []);
   return (
     <div>
       <h1>Home Layout Header</h1>

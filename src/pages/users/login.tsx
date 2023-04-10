@@ -1,23 +1,28 @@
-import { useAppDispatch } from "@/hooks";
-import { AppDispatch } from "@/redux/store";
-import { loginActionApi } from "@/redux/userReducer";
-import axios from "axios";
+import { useAuth } from "@/hooks";
+import AuthLayout from "@/layout/AuthLayout";
+import { LoginInterface } from "@/utils/types/authType";
 import React, { useState } from "react";
 type Props = {};
 
 const Login = (props: Props) => {
-  const [loginData, setLoginData] = useState({});
-  const [loading, setLoading] = useState<boolean>(false);
-  const dispatch: AppDispatch = useAppDispatch();
+  const [loginData, setLoginData] = useState<LoginInterface>({
+    email: "",
+    mat_khau: "",
+  });
+  const { login } = useAuth({
+    revalidateOnMount: false,
+  });
 
   const loginTypeHandle = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log(loginData);
-    dispatch(loginActionApi(loginData));
+    try {
+      await login(loginData);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const inputHandle = (event: any) => {
-    // const name = event.target.getAttribute("name");
     const { name, value } = event.target;
     setLoginData({
       ...loginData,
@@ -34,5 +39,7 @@ const Login = (props: Props) => {
     </form>
   );
 };
+
+Login.Layout = AuthLayout;
 
 export default Login;

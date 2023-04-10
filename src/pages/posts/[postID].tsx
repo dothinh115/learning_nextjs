@@ -1,8 +1,6 @@
-import { useAppDispatch, useAppSelector } from "@/hooks";
 import HomeLayout from "@/layout/HomeLayout";
 import { movieDetailAction } from "@/redux/movieReducer";
 import store, { AppDispatch, AppState } from "@/redux/store";
-import { fetcher } from "@/utils/config";
 import {
   GetServerSideProps,
   GetServerSidePropsContext,
@@ -20,30 +18,17 @@ type Props = {
   ma_phim: string;
 };
 
-const MovieDetailFetcher = (ma_phim: any) => {
-  const { data, error, isLoading } = useSWR(
-    `https://nodejs.dothinh.info/api/movies/getMovieInfo/${ma_phim}`,
-    fetcher
-  );
-  return {
-    data,
-    error,
-    isLoading,
-  };
-};
-
 const PostDetail = ({ ten_phim, ma_phim }: Props) => {
   const router = useRouter();
   if (router.isFallback) return <div>LOADING</div>;
 
-  const { data, error, isLoading } = MovieDetailFetcher(ma_phim);
+  const { data, error, isLoading } = useSWR(`/movies/getMovieInfo/${ma_phim}`);
 
   if (isLoading) return <div>LOADING</div>;
-
   return (
     <div>
       <h1>Title: {ten_phim && ten_phim}</h1>
-      <p>Image: {data?.data.hinh_anh}</p>
+      <p>Description: {data?.data.mo_ta || "--"}</p>
     </div>
   );
 };

@@ -1,27 +1,12 @@
 import axios, { AxiosInstance } from "axios";
 
-export const fetcher = (...args: any) => fetch(args).then((res) => res.json());
-
-let userInfo = null;
-if (typeof window !== "undefined") {
-  userInfo = localStorage.getItem("userInfo");
-}
-
-let token = null;
-if (userInfo) {
-  token = JSON.parse(userInfo).accessToken;
-}
-
 export const API: AxiosInstance = axios.create({
-  baseURL: "https://nodejs.dothinh.info/api",
-  headers: {
-    Authorization: "Bearer " + token,
-  },
+  baseURL: "/api",
 });
 
 API.interceptors.response.use(
   (res: any) => {
-    return res;
+    return res.data;
   },
   (error: any) => {
     return Promise.reject(error);
