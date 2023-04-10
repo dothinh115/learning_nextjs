@@ -1,3 +1,4 @@
+import HomeLayout from "@/layout/HomeLayout";
 import { GetStaticProps } from "next";
 import Link from "next/link";
 import React from "react";
@@ -9,19 +10,19 @@ type Props = {
 const PostsList = ({ posts }: Props) => {
   if (!posts) return;
   return (
-    <>
-      <ul>
-        {posts.map((post: any) => {
-          return (
-            <li key={post.id}>
-              <Link href={`/posts/${post.ma_phim}`}>{post.ten_phim}</Link>
-            </li>
-          );
-        })}
-      </ul>
-    </>
+    <ul>
+      {posts.map((post: any) => {
+        return (
+          <li key={post.ma_phim}>
+            <Link href={`/posts/${post.ma_phim}`}>{post.ten_phim}</Link>
+          </li>
+        );
+      })}
+    </ul>
   );
 };
+
+PostsList.Layout = HomeLayout;
 
 export default PostsList;
 

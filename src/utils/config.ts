@@ -1,6 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 
-export const fetcher = (...args: any) => axios(args).then((res) => res);
+export const fetcher = (...args: any) => fetch(args).then((res) => res.json());
+
 let userInfo = null;
 if (typeof window !== "undefined") {
   userInfo = localStorage.getItem("userInfo");

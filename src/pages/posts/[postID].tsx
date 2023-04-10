@@ -1,4 +1,5 @@
 import { useAppDispatch, useAppSelector } from "@/hooks";
+import HomeLayout from "@/layout/HomeLayout";
 import { movieDetailAction } from "@/redux/movieReducer";
 import store, { AppDispatch, AppState } from "@/redux/store";
 import { fetcher } from "@/utils/config";
@@ -19,7 +20,7 @@ type Props = {
   ma_phim: string;
 };
 
-const movieDetailFetcher = (ma_phim: any) => {
+const MovieDetailFetcher = (ma_phim: any) => {
   const { data, error, isLoading } = useSWR(
     `https://nodejs.dothinh.info/api/movies/getMovieInfo/${ma_phim}`,
     fetcher
@@ -34,31 +35,19 @@ const movieDetailFetcher = (ma_phim: any) => {
 const PostDetail = ({ ten_phim, ma_phim }: Props) => {
   const router = useRouter();
   if (router.isFallback) return <div>LOADING</div>;
-  const dispatch: AppDispatch = useAppDispatch();
-  const { movieDetail } = useAppSelector(
-    (store: AppState) => store.movieReducer
-  );
 
-  const { data, error, isLoading } = movieDetailFetcher(ma_phim);
+  const { data, error, isLoading } = MovieDetailFetcher(ma_phim);
 
   if (isLoading) return <div>LOADING</div>;
-
-  console.log(data);
-
-  useEffect(() => {
-    dispatch(movieDetailAction(data?.data));
-  }, [data]);
-
-  useEffect(() => {
-    console.log(movieDetail);
-  }, [movieDetail]);
   return (
     <div>
       <h1>Title: {ten_phim && ten_phim}</h1>
-      <p>Image: {movieDetail?.hinh_anh && movieDetail?.hinh_anh}</p>
+      <p>Image: {data?.data.hinh_anh}</p>
     </div>
   );
 };
+
+PostDetail.Layout = HomeLayout;
 
 export default PostDetail;
 
