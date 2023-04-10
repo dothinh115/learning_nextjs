@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import httpProxy from "http-proxy";
+import Cookies from "cookies";
 
 const proxy = httpProxy.createProxyServer();
 
@@ -16,8 +17,14 @@ export default async function handler(
   res: NextApiResponse
 ) {
   new Promise((resolve) => {
+    const cookies = new Cookies(req, res);
+    const access_token = cookies.get("access_token");
+    if (access_token) {
+      req.headers.Authorization = `Bearer ${access_token}`;
+    }
+    req.headers.cookies = "";
     proxy.web(req, res, {
-      target: "https://nodejs.dothinh.info/",
+      target: process.env.API_URL,
       changeOrigin: true,
       selfHandleResponse: false,
     });
